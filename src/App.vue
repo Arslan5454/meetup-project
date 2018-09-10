@@ -1,8 +1,13 @@
 <template>
+
   <v-app>
-    <v-navigation-drawer v-model="sideNav">
+    <v-navigation-drawer temporary 
+      fixed
+      app v-model="sideNav">
       <v-list>
-        <v-list-tile v-for="item in menuItem" :key="item.title">
+        <v-list-tile v-for="item in menuItem" 
+        :key="item.title"
+        :to="item.link">
           <v-list-tile-action>
             <v-icon>{{ item.icon }}</v-icon>
           </v-list-tile-action>
@@ -10,9 +15,11 @@
         </v-list-tile>
       </v-list>
     </v-navigation-drawer>
-    <v-toolbar dark class="primary" absolute>
+    <v-toolbar dark class="primary">
       <v-toolbar-side-icon @click.native="sideNav=!sideNav"></v-toolbar-side-icon>
-      <v-toolbar-title>DevMeetup</v-toolbar-title>
+      <v-toolbar-title>
+        <router-link to="/" tag="span" style="cursor: pointer">DevMeetup</router-link>
+      </v-toolbar-title>
       <v-spacer></v-spacer>
       <v-toolbar-items>
         <v-btn flat v-for="item in menuItem" :key="item.title">
@@ -21,10 +28,9 @@
         </v-btn>
       </v-toolbar-items>
     </v-toolbar>
-    <main>
+     <main>
      <router-view></router-view>
     </main>
-    <v-btn>Add me</v-btn>
   </v-app>
 </template>
 
@@ -32,16 +38,36 @@
 export default {
   data () {
     return {
+      clipped: false,
+      drawer: true,
+      fixed: false,
+      items: [{
+        icon: 'bubble_chart',
+        title: 'Inspire'
+      }],
+      miniVariant: false,
+      right: true,
+      rightDrawer: false,
+      title: 'Vuetify.js',
       sideNav: false,
       menuItem: [
-        {icon: 'supervisor_account', title: 'ViewMeetups'},
-        {icon: 'person', title: 'Profile'},
-        {icon: 'room', title: 'Organize Meet up'},
-        {icon: 'face', title: 'Sign up'},
-        {icon: 'lock_open', title: 'Sign In'}
+        {icon: 'supervisor_account', title: 'ViewMeetups', link: '/meetups'},
+        {icon: 'person', title: 'Profile', link: '/profile'},
+        {icon: 'room', title: 'Organize Meet up', link: '/meetup/new'},
+        {icon: 'face', title: 'Sign up', link: '/signin'},
+        {icon: 'lock_open', title: 'Sign In', link: '/signup'}
       ]
     }
   },
   name: 'App'
 }
 </script>
+<style lang="stylus">
+  @import ('./stylus/main');
+  
+.nav {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+</style>>
