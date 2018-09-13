@@ -16,13 +16,15 @@
       </v-list>
     </v-navigation-drawer>
     <v-toolbar dark class="primary">
-      <v-toolbar-side-icon @click.native="sideNav=!sideNav"></v-toolbar-side-icon>
+      <v-toolbar-side-icon @click.stop="sideNav=!sideNav"></v-toolbar-side-icon>
       <v-toolbar-title>
         <router-link to="/" tag="span" style="cursor: pointer">DevMeetup</router-link>
       </v-toolbar-title>
       <v-spacer></v-spacer>
       <v-toolbar-items>
-        <v-btn flat v-for="item in menuItem" :key="item.title">
+        <v-btn flat v-for="item in menuItem" 
+        :key="item.title"
+        :to="item.link">
           <v-icon left>{{ item.icon }}</v-icon>
           {{item.title}}
         </v-btn>
@@ -63,7 +65,7 @@ export default {
 }
 </script>
 <style lang="stylus">
-  @import ('./stylus/main');
+  @import "./stylus/main.styl"
   
 .nav {
   list-style: none;
