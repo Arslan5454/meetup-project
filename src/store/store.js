@@ -7,17 +7,32 @@ export const store = new Vuex.Store({
   state: {
     loadedMeetups: [
       {
-        imageUrl: 'http://frugalfrolicker.com/wp-content/uploads/2014/06/top-of-the-rock-1.jpg',
-        id: 'dsadsadsa212',
-        date: '2017-07-17'},
+        imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/4/47/New_york_times_square-terabass.jpg',
+        id: 'afajfjadfaadfa323',
+        title: 'Meetup in New York',
+        date: '2017-07-17'
+      },
       {
-        imageUrl: 'https://cdn.vuetifyjs.com/images/carousel/sky.jpg',
-        id: 'fdssadsad2322',
+        imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/7/7a/Paris_-_Blick_vom_gro%C3%9Fen_Triumphbogen.jpg',
+        id: 'aadsfhbkhlk1241',
+        title: 'Meetup in Paris',
         date: '2017-07-19'
+      },
+      {
+        imageUrl: 'https://images5.alphacoders.com/340/thumb-1920-340961.jpg',
+        id: 'aadsfhbkhlk1241',
+        title: 'Meetup in Londan',
+        date: '2017-07-20'
       }
     ],
     user: {
-      id: 'jkdshfsajkhf234', registeredMeetups: ['dsadsadsa212']
+      id: 'ajaldslfalsk12',
+      registeredMeetups: ['aadsfhbkhlk1241']
+    }
+  },
+  mutations: {
+    createMeetup (state, payload) {
+      state.loadedMeetups.push(payload)
     }
   },
   actions: {
@@ -28,15 +43,10 @@ export const store = new Vuex.Store({
         imageUrl: payload.imageUrl,
         description: payload.description,
         date: payload.date,
-        id: 'adadasd23'
+        id: 'kfdlsfjslakl12'
       }
       // Reach out to firebase and store it
       commit('createMeetup', meetup)
-    }
-  },
-  mutations: {
-    createMeetup (state, payload) {
-      state.loadedMeetups.push(payload)
     }
   },
   getters: {
