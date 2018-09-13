@@ -7,21 +7,21 @@
                      <h6 class="primary--text">My Meetup</h6>
                     </v-card-title>
                     <v-card-media
-                    src="http://frugalfrolicker.com/wp-content/uploads/2014/06/top-of-the-rock-1.jpg"
+                    :src="meetup.imageUrl"
                     height="400px">
                     </v-card-media>
                     <v-card-text>
-                        <div class="info--text">18th July 2019</div>
+                        <div class="info--text">{{meetup.date}}</div>
                         <div>
                         Lorem ipsum dolor, sit amet consectetur adipisicing elit. 
                         Veritatis explicabo recusandae molestias officiis ex corrupti obcaecati iusto, 
                         autem cum voluptates fuga voluptate suscipit at laboriosam? Itaque asperiores nemo nihil minus?
                         </div>
                     </v-card-text>
-                    <v-card-action>
+                    <v-card-actions>
                         <v-spacer></v-spacer>
                         <v-btn class="error">Register</v-btn>
-                    </v-card-action>
+                    </v-card-actions>
                 </v-card>
             </v-flex>
         </v-layout>
@@ -31,7 +31,7 @@
 export default {
   props: ['id'],
   computed: {
-    meetup () {
+    meetup (id) {
       return this.$store.getters.loadedMeetups(this.id)
     }
   }
