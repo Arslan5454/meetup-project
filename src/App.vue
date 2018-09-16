@@ -5,7 +5,7 @@
       fixed
       app v-model="sideNav">
       <v-list>
-        <v-list-tile v-for="item in menuItem" 
+        <v-list-tile v-for="item in menuItems" 
         :key="item.title"
         :to="item.link">
           <v-list-tile-action>
@@ -22,7 +22,7 @@
       </v-toolbar-title>
       <v-spacer></v-spacer>
       <v-toolbar-items>
-        <v-btn flat v-for="item in menuItem" 
+        <v-btn flat v-for="item in menuItems" 
         :key="item.title"
         :to="item.link">
           <v-icon left>{{ item.icon }}</v-icon>
@@ -37,32 +37,32 @@
 </template>
 
 <script>
-export default {
-  data () {
-    return {
-      clipped: false,
-      drawer: true,
-      fixed: false,
-      items: [{
-        icon: 'bubble_chart',
-        title: 'Inspire'
-      }],
-      miniVariant: false,
-      right: true,
-      rightDrawer: false,
-      title: 'Vuetify.js',
-      sideNav: false,
-      menuItem: [
-        {icon: 'supervisor_account', title: 'ViewMeetups', link: '/meetups'},
-        {icon: 'person', title: 'Profile', link: '/profile'},
-        {icon: 'room', title: 'Organize Meet up', link: '/meetup/new'},
-        {icon: 'face', title: 'Sign up', link: '/signup'},
-        {icon: 'lock_open', title: 'Sign In', link: '/signin'}
-      ]
+  export default {
+    data () {
+      return {
+        sideNav: false
+      }
+    },
+    computed: {
+      menuItems () {
+        let menuItems = [
+          {icon: 'face', title: 'Sign up', link: '/signup'},
+          {icon: 'lock_open', title: 'Sign in', link: '/signin'}
+        ]
+        if (this.userIsAuthenticated) {
+          menuItems = [
+            {icon: 'supervisor_account', title: 'View Meetups', link: '/meetups'},
+            {icon: 'room', title: 'Organize Meetup', link: '/meetup/new'},
+            {icon: 'person', title: 'Profile', link: '/profile'}
+          ]
+        }
+        return menuItems
+      },
+      userIsAuthenticated () {
+        return this.$store.getters.user !== null && this.$store.getters.user !== undefined
+      }
     }
-  },
-  name: 'App'
-}
+  }
 </script>
 <style lang="stylus">
   @import "./stylus/main.styl"
