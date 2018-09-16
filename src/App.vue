@@ -56,8 +56,8 @@ export default {
         {icon: 'supervisor_account', title: 'ViewMeetups', link: '/meetups'},
         {icon: 'person', title: 'Profile', link: '/profile'},
         {icon: 'room', title: 'Organize Meet up', link: '/meetup/new'},
-        {icon: 'face', title: 'Sign up', link: '/signin'},
-        {icon: 'lock_open', title: 'Sign In', link: '/signup'}
+        {icon: 'face', title: 'Sign up', link: '/signup'},
+        {icon: 'lock_open', title: 'Sign In', link: '/signin'}
       ]
     }
   },
