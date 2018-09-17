@@ -29,5 +29,11 @@ new Vue({
       projectId: 'first-project-fc28f',
       storageBucket: ''
     })
+    firebase.auth().onAuthStateChanged((user) => {
+      if (user) {
+        this.$store.dispatch('autoSignIn', user)
+      }
+    })
+    this.$store.dispatch('loadMeetups')
   }
 })
