@@ -27,7 +27,7 @@ new Vue({
       authDomain: 'first-project-fc28f.firebaseapp.com',
       databaseURL: 'https://first-project-fc28f.firebaseio.com',
       projectId: 'first-project-fc28f',
-      storageBucket: ''
+      storageBucket: 'gs://first-project-fc28f.appspot.com'
     })
     firebase.auth().onAuthStateChanged((user) => {
       if (user) {
