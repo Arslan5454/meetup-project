@@ -61,12 +61,14 @@
           </v-layout>
           <v-layout row class="mb-2">
             <v-flex xs12 sm6 offset-sm3>
-              <v-date-picker></v-date-picker>
+            <v-date-picker v-model="date"></v-date-picker>
+              {{date}}
             </v-flex>
           </v-layout>
           <v-layout row>
             <v-flex xs12 sm6 offset-sm3>
-              <v-time-picker format="24hr"></v-time-picker>
+              <v-time-picker v-model="time" format="24hr"></v-time-picker>
+              {{time}}
             </v-flex>
           </v-layout>
           <v-layout row>
@@ -91,8 +93,8 @@
         location: '',
         imageUrl: '',
         description: '',
-        date: new Date(),
-        time: new Date(),
+        date: null,
+        time: null,
         image: null
       }
     },
@@ -132,8 +134,9 @@
           description: this.description,
           date: this.submittableDateTime
         }
-        this.$store.dispatch('createMeetup', meetupData)
-        this.$router.push('/meetups')
+        this.$store.dispatch('createMeetup', meetupData).then(data => {
+          this.$router.push('/meetups')
+        })
       },
       onPickFile () {
         this.$refs.fileInput.click()

@@ -98,32 +98,64 @@ export const store = new Vuex.Store({
         date: payload.date.toISOString(),
         creatorId: getters.user.id
       }
-      let imageUrl
       let key
-      firebase.database().ref('meetups').push(meetup)
+      return firebase.database().ref('meetups').push(meetup)
         .then((data) => {
           key = data.key
-          return key
-        })
-        .then(key => {
           const filename = payload.image.name
           const ext = filename.slice(filename.lastIndexOf('.'))
           return firebase.storage().ref('meetups/' + key + '.' + ext).put(payload.image)
-        })
-        .then(fileData => {
-          imageUrl = fileData.metadata.downloadURLs[0]
-          return firebase.database().ref('meetups').child(key).update({imageUrl: imageUrl})
-        })
-        .then(() => {
-          commit('createMeetup', {
-            ...meetup,
-            imageUrl: imageUrl,
-            id: key
+          .then(fileData => {
+            // console.log(fileData.ref.getDownloadURL())
+            // imageUrl = fileData.ref.getDownloadURL()
+            return fileData.ref.getDownloadURL().then(function (downloadURL) {
+              // console.log('File available at', downloadURL)
+              return firebase.database().ref('meetups').child(key).update({ imageUrl: downloadURL })
+              .then(() => {
+                commit('createMeetup', {
+                  ...meetup,
+                  imageUrl: downloadURL,
+                  id: key
+                })
+                // return true
+              })
+              .catch((error) => {
+                console.log(error)
+              })
+            })
           })
+          // return key
         })
-        .catch((error) => {
-          console.log(error)
-        })
+        // .then(key => {
+        // })
+
+      // let imageUrl
+      // let key
+      // firebase.database().ref('meetups').push(meetup)
+      //   .then((data) => {
+      //     key = data.key
+      //     return key
+      //   })
+      //   .then(key => {
+      //     const filename = payload.image.name
+      //     const ext = filename.slice(filename.lastIndexOf('.'))
+      //     return firebase.storage().ref('meetups/' + key + '.' + ext).put(payload.image)
+      //     .then(fileData => {
+      //       console.log(fileData.metadata)
+      //       imageUrl = fileData.metadata.downloadURLs[0]
+      //       return firebase.database().ref('meetups').child(key).update({imageUrl: imageUrl})
+      //       .then(() => {
+      //         commit('createMeetup', {
+      //           ...meetup,
+      //           imageUrl: imageUrl,
+      //           id: key
+      //         })
+      //       })
+      //     })
+      //   })
+      //   .catch((error) => {
+      //     console.log(error)
+      //   })
       // Reach out to firebase and store it
     },
     updateMeetupData ({commit}, payload) {

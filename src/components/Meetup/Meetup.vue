@@ -4,7 +4,7 @@
       <v-flex xs12 class="text-xs-center">
         <v-progress-circular
           indeterminate
-          class="primary--text"
+          class="error--text"
           :width="7"
           :size="70"></v-progress-circular>
       </v-flex>
@@ -19,17 +19,25 @@
               <app-edit-meetup-details-dialog :meetup="meetup"></app-edit-meetup-details-dialog>
             </template>
           </v-card-title>
-          <v-card-media
+          <v-img
             :src="meetup.imageUrl"
             height="400px"
-          ></v-card-media>
+          ></v-img>
           <v-card-text>
             <div class="info--text">{{ meetup.date | date }} - {{ meetup.location }}</div>
+            <div>
+              <app-edit-meetup-date-dialog
+                :meetup="meetup" v-if="userIsCreator">
+              </app-edit-meetup-date-dialog>
+              <app-edit-meetup-time-dialog
+                :meetup="meetup" v-if="userIsCreator">
+              </app-edit-meetup-time-dialog>
+            </div>
             <div>{{ meetup.description }}</div>
           </v-card-text>
           <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn class="error">Register</v-btn>
+            <v-btn class="primary">Register</v-btn>
           </v-card-actions>
         </v-card>
       </v-flex>

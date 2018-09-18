@@ -20,13 +20,13 @@
                 id="title"
                 v-model="editedTitle"
                 required></v-text-field>
-              <v-text-field
+              <v-textarea
                 name="description"
                 label="Description"
                 id="description"
                 multi-line
                 v-model="editedDescription"
-                required></v-text-field>
+                required></v-textarea>
             </v-card-text>
           </v-flex>
         </v-layout>
