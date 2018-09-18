@@ -29,6 +29,19 @@ export const store = new Vuex.Store({
     error: null
   },
   mutations: {
+    registerUserForMeetup (state, payload) {
+      const id = payload.id
+      if (state.user.registeredMeetups.findIndex(meetup => meetup.id === id) >= 0) {
+        return
+      }
+      state.user.registeredMeetups.push(id)
+      state.user.fbkeys[id] = payload.fbkey
+    },
+    unregisterUserFromMeetup (state, payload) {
+      const registeredMeetups = state.user.registeredMeetups
+      registeredMeetups.splice(registeredMeetups.findIndex(meetup => meetup.id === payload), 1)
+      Reflect.deleteProperty(state.user.fbkeys, payload)
+    },
     setLoadedMeetups (state, payload) {
       state.loadedMeetups = payload
     },
@@ -63,6 +76,38 @@ export const store = new Vuex.Store({
     }
   },
   actions: {
+    registerUserForMeetup ({commit, getters}, payload) {
+      commit('setLoading', true)
+      const user = getters.user
+      firebase.database().ref('/users/' + user.id).child('/registrations/')
+      .push(payload)
+      .then(data => {
+        commit('setLoading', false)
+        commit('registerUserForMeetup', {id: payload, fbkey: data.key})
+      })
+      .catch(error => {
+        console.log(error)
+        commit('setLoading', false)
+      })
+    },
+    unregisterUserFromMeetup ({commit, getters}, payload) {
+      commit('setLoading', true)
+      const user = getters.user
+      if (!user.fbkeys) {
+        return
+      }
+      const fbkey = user.fbkeys[payload]
+      firebase.database().ref('/users/' + user.id + '/registrations/').child(fbkey)
+      .remove()
+      .then(() => {
+        commit('setLoading', false)
+        commit('unregisterUserFromMeetup', payload)
+      })
+      .catch(error => {
+        console.log(error)
+        commit('setLoading', payload)
+      })
+    },
     loadMeetups ({commit}) {
       commit('setLoading', true)
       firebase.database().ref('meetups').once('value')
@@ -189,7 +234,8 @@ export const store = new Vuex.Store({
             commit('setLoading', false)
             const newUser = {
               id: user.uid,
-              registeredMeetups: []
+              registeredMeetups: [],
+              fbkeys: {}
             }
             commit('setUser', newUser)
           }
@@ -211,7 +257,8 @@ export const store = new Vuex.Store({
             commit('setLoading', false)
             const newUser = {
               id: user.uid,
-              registeredMeetups: []
+              registeredMeetups: [],
+              fbkeys: {}
             }
             commit('setUser', newUser)
           }
@@ -225,7 +272,10 @@ export const store = new Vuex.Store({
         )
     },
     autoSignIn ({commit}, payload) {
-      commit('setUser', {id: payload.uid, registeredMeetups: []})
+      commit('setUser', {
+        id: payload.uid,
+        registeredMeetups: [],
+        fbkeys: {}})
     },
     logout ({commit}) {
       firebase.auth().signOut()
