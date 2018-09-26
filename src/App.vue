@@ -66,7 +66,8 @@
       menuItems () {
         let menuItems = [
           {icon: 'face', title: 'Sign up', link: '/signup'},
-          {icon: 'lock_open', title: 'Sign in', link: '/signin'}
+          {icon: 'lock_open', title: 'Sign in', link: '/signin'},
+          {icon: 'account_balance', title: 'attandence', link: '/attandence'}
         ]
         if (this.userIsAuthenticated) {
           menuItems = [
