@@ -8,6 +8,7 @@ import Signup from '@/components/User/Signup'
 import Signin from '@/components/User/Signin'
 import Meetup from '@/components/Meetup/Meetup'
 import attandence from '@/components/attandence.vue'
+import dataTable from '@/components/dataTable.vue'
 import AuthGuard from './auth-guard'
 
 Vue.use(Router)
@@ -56,6 +57,11 @@ export default new Router({
       path: '/attandence',
       name: 'attandence',
       component: attandence
+    },
+    {
+      path: '/datatable',
+      name: 'dataTable',
+      component: dataTable
     }
   ],
   mode: 'history'
