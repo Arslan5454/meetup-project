@@ -1,34 +1,10 @@
 <template>
-  <v-layout row wrap>
+ <v-layout row wrap> 
     <v-flex md12 v-if="date !== ''">
-      <v-dialog v-model="dialog" max-width="500px">
-        <v-btn slot="activator" color="primary" dark class="mb-2">New Item</v-btn>
-        <v-card>
-          <v-card-title>
-            <span class="headline">{{ formTitle }}</span>
-          </v-card-title>
-          <v-card-text>
-            <v-container grid-list-md>
-              <v-layout wrap>
-                <v-flex xs12 sm6 md4>
-                  <v-text-field v-model="editedItem.id"></v-text-field>
-                </v-flex>
-                <v-flex xs12 sm6 md4>
-                  <v-text-field v-model="editedItem.name"></v-text-field>
-                </v-flex>
-              </v-layout>
-            </v-container>
-          </v-card-text>
-           <v-card-actions>
-            <v-spacer></v-spacer>
-            <v-btn color="blue darken-1" flat @click.native="close">Cancel</v-btn>
-            <v-btn color="blue darken-1" flat @click.native="save">Save</v-btn>
-          </v-card-actions>
-        </v-card>
-      </v-dialog>
+      {{getCurrentMonth}}
+      {{getMonth}}
       <v-data-table id="firstTable"
         :items="rows"
-        :headers="header"
         hide-actions
         class="elevation-1">
         <template slot="headers" slot-scope="props">
@@ -42,22 +18,7 @@
         <template slot="items" slot-scope="props">
           <td>{{ props.item.id }}</td>
           <td>{{ props.item.name }}</td>
-          <td v-for="(item, i) in getCurrentMonth" :key="i"> A </td>
-          <td class="justify-center layout px-0">
-          <v-icon
-            small
-            class="mr-2"
-            @click="editItem(props.item)"
-          >
-            edit
-          </v-icon>
-          <v-icon
-            small
-            @click="deleteItem(props.item)"
-          >
-            delete
-          </v-icon>
-        </td>
+          <td v-for="(item, i) in getMonth" :key="i"> {{item[1]}} </td>
         </template>
       </v-data-table>
   </v-flex>
@@ -86,131 +47,69 @@
   </v-flex>
   </v-layout>
 </template>
-
 <script>
   export default {
     data () {
       return {
         date: '',
+        monthArray: [['2018-2-01', 'P'], ['2018-02-02', 'P'], ['2018-02-05', 'A'], ['2018-02-06', 'P'], ['2018-02-07', 'P'], ['2018-02-08', 'P'], ['2018-02-09', 'P'], ['2018-02-12', 'P'], ['2018-02-13', 'A'], ['2018-02-14', 'P'], ['2018-02-15', 'P'], ['2018-02-16', 'A'], ['2018-02-19', 'P'], ['2018-02-20', 'P'], ['2018-02-21', 'A'], ['2018-02-22', 'A'], ['2018-02-23', 'P'], ['2018-02-26', 'P'], ['2018-02-27', 'P'], ['2018-02-28', 'A']],
+        dataArray: [],
+        dialog: false,
+        getValues: '',
         menu2: false,
-        header: [
-         { text: 'Actions', value: 'name', sortable: false }
-
-        ],
         rows: [
-      {value: false, id: 1, name: 'Arslan Hanif'},
-      {value: false, id: 2, name: 'Haseeb'},
-      {value: false, id: 3, name: 'Faizan'},
-      {value: false, id: 4, name: 'Imad'},
-      {value: false, id: 5, name: 'Naseeb'},
-      {value: false, id: 6, name: 'Bilal'},
-      {value: false, id: 7, name: 'Ehtisham'}
-        ],
-        row: [],
-        editedIndex: -1,
-        editedItem: {
-          id: '',
-          name: ''
-        },
-        defaultItem: {
-          id: '',
-          name: ''
-        }
+        {id: 1, name: 'Arslan Hanif'}
+        // {id: 2, name: 'Haseeb'},
+        // {id: 3, name: 'Faizan'},
+        // {id: 4, name: 'Imad'},
+        // {id: 5, name: 'Naseeb'},
+        // {id: 6, name: 'Bilal'},
+        // {id: 7, name: 'Ehtisham'}
+        ]
       }
     },
     computed: {
       getCurrentMonth () {
         let getYearAndMonth = this.date.split('-')
-        return new Date(getYearAndMonth[0], getYearAndMonth[1], 0).getDate()
+        let totalDays = new Date(getYearAndMonth[0], getYearAndMonth[1], 0).getDate()
+        return totalDays
       },
-      formTitle () {
-        return this.editedIndex === -1 ? 'New Item' : 'Edit Item'
-      },
-      daysInMonth () {
-        return this.getCurrentMonth
-      }
-    },
-
-    watch: {
-      dialog (val) {
-        val || this.close()
-      }
-    },
-
-    created () {
-      this.initialize()
-    },
-
-    methods: {
-      initialize () {
-        this.rows = [
-          {
-            id: '',
-            name: 'Arslan Hanif'
-          },
-          {
-            id: '2',
-            name: 'Haseeb'
-          },
-          {
-            id: '3',
-            name: 'Faizan'
-          },
-          {
-            id: '4',
-            name: 'Imad'
-          },
-          {
-            id: '5',
-            name: 'Naseeb'
-          },
-          {
-            id: '6',
-            name: 'Bilal'
-          },
-          {
-            id: '7',
-            name: 'Ehitsham'
+      getMonth () {
+        // let arr = []
+        let that = this
+        let dataArray = []
+        for (let i = 0; i <= this.getCurrentMonth; i++) {
+          // arr.push(this.date + '-' + i)
+          for (let j = 0; j < that.monthArray.length; j++) {
+            // arr.parseInt(this.monthArray[2])
+            let currentDay = this.monthArray[j][0].split('-')
+            // console.log(currentDay[2], i)
+            if (i === parseInt(currentDay[2])) {
+              console.log(i)
+              // console.log('current attendance is ', this.monthArray[j])
+              if (this.monthArray[j] !== undefined && this.monthArray[j] !== null) {
+                dataArray[i] = [i, this.monthArray[j][1]]
+              }
+              // if (this.monthArray[i][1] === 'P' || this.monthArray[i][1] === 'A') {
+              //   dataArray.push([i, this.monthArray[j][1]])
+              // }
+            } else if (!dataArray[i]) {
+              dataArray[i] = [i, 'H']
+            }
           }
-        ]
-      },
-
-      editItem (item) {
-        this.editedIndex = this.rows.indexOf(item)
-        this.editedItem = Object.assign({}, item)
-        this.dialog = true
-      },
-
-      deleteItem (item) {
-        const index = this.rows.indexOf(item)
-        confirm('Are you sure you want to delete this item?') && this.rows.splice(index, 1)
-      },
-
-      close () {
-        this.dialog = false
-        setTimeout(() => {
-          this.editedItem = Object.assign({}, this.defaultItem)
-          this.editedIndex = -1
-        }, 300)
-      },
-
-      save () {
-        if (this.editedIndex > -1) {
-          Object.assign(this.rows[this.editedIndex], this.editedItem)
-        } else {
-          this.rows.push(this.editedItem)
         }
-        this.close()
+        dataArray.shift()
+        return dataArray
       }
     }
   }
 </script>
+
 <style>
             #firstTable {
             font-family: 'Open Sans', sans-serif;
             border-collapse: collapse;
             border: 3px solid #44475C;
-            margin: 10px 10px 0 10px;
           }
 
           #firstTable th {
